@@ -1,4 +1,4 @@
-# calculates the students rank , total , average using in_built functions
+# calculates the students rank , total , average using in_built functions handles ties(same rank-> normal ranking)
 def student_calculator(students):
     std = {}
 
