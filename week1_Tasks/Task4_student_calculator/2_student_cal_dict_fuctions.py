@@ -1,5 +1,4 @@
 # calculates the students rank , total , average using in_built functions
-
 def student_calculator(students):
     std = {}
 
@@ -19,7 +18,9 @@ def student_calculator(students):
         for name2 in std:
             if std[name2]["total"]>std[name1]["total"]:
                 rank+=1
-        rank_dict[rank]=name1
+        if rank not in rank_dict:
+            rank_dict[rank] = []
+        rank_dict[rank].append(name1)
 
     return std,rank_dict
       
@@ -27,7 +28,7 @@ def student_calculator(students):
 def main():
    
     students = {
-        "Ajay":  {"Math": 45, "English": 99, "Tamil": 50, "Science": 100, "CS": 100},
+        "Ajay":  {"Math": 78, "English": 85, "Tamil": 90, "Science": 88,  "CS": 92},
         "Arun":  {"Math": 78, "English": 85, "Tamil": 90, "Science": 88,  "CS": 92},
         "Bala":  {"Math": 65, "English": 70, "Tamil": 80, "Science": 75,  "CS": 89},
         "Kumar": {"Math": 92, "English": 95, "Tamil": 87, "Science": 91,  "CS": 94},
@@ -36,15 +37,14 @@ def main():
     
     result,rank_dict = student_calculator(students)
 
-    for rank in range(1, len(rank_dict) + 1):
-
-        name = rank_dict[rank]
-
-        print(f"Rank    : {rank}")
-        print(f"Name    : {name}")
-        print(f"Total   : {result[name]['total']}")
-        print(f"Average : {result[name]['avg']:.2f}")
-        print()
+    for rank in range(1, len(students) + 1):
+        if rank in rank_dict:
+            for name in rank_dict[rank]:
+                print()
+                print(f"Rank    : {rank}")
+                print(f"Name    : {name}")
+                print(f"Total   : {result[name]['total']}")
+                print(f"Average : {result[name]['avg']:.2f}")
 
 main()
 
