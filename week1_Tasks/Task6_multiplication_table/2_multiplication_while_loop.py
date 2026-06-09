@@ -1,3 +1,5 @@
+# While loop
+
 def multiplication(n,num):
     i=1
     while i!=n+1:
