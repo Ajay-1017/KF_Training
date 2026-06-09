@@ -19,13 +19,15 @@ def calculator(expression):
                     return "division by zero is not possible"
                 result/=num
             case "%":
-                result%num
+                result%=num
+            case "_":
+                return "invalid operator"
     return result
 
 def main():
     while True:
         expression = input("Enter the expression in this format 5 + 8 - 10 : ")
-        
+
         arr = expression.split()
         valid = True
 
