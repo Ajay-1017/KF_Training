@@ -22,7 +22,6 @@ def student_cal(std_marks):
     
     
 
-
 def main():
     std_marks={}
     sub =["mat","sci","cs","tam","eng"]
