@@ -1,5 +1,9 @@
 # pattern 17 
 
+# ...A...
+# ..ABA..
+# .ABCBA.
+# ABCDCBA
 
 def pattern17(n):
     for i in range(1,n+1):
