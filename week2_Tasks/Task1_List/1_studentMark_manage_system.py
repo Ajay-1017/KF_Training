@@ -32,26 +32,26 @@ def average(marks):
     avg = total / len(marks)
     return avg
 
-# def remove_duplicates(marks):
-#     marks.sort()
-#     i=0
-#     j=0
-#     while j<len(marks):
-#         if marks[i]!=marks[j]:
-#             marks[i+1]=marks[j]
-#             i+=1
-#         j+=1
-#     return marks[0:i+1]
-
 def remove_duplicates(marks):
-    seen=set()
-    ans=[]
-    for mark in marks:
-        if mark not in seen:
-            ans.append(mark)
-        seen.add(mark)
-    marks[:]=ans
-    return marks
+    marks.sort()
+    i=0
+    j=0
+    while j<len(marks):
+        if marks[i]!=marks[j]:
+            marks[i+1]=marks[j]
+            i+=1
+        j+=1
+    return marks[0:i+1]
+
+# def remove_duplicates(marks):
+#     seen=set()
+#     ans=[]
+#     for mark in marks:
+#         if mark not in seen:
+#             ans.append(mark)
+#         seen.add(mark)
+#     marks[:]=ans
+#     return marks
 
 def sort_marks(marks):
     marks.sort()
