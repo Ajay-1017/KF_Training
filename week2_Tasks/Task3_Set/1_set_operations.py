@@ -2,10 +2,13 @@ s1 = {1,1,1,2,2,3,4}
 
 s2 = {4,5,6,7,8}
 
+# Add
 s1.add(5)
 
+# DISCARD
 s1.discard(6)
 
+# REMOVE
 s1.remove(3)
 
 print(s1)
