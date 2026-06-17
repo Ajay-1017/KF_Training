@@ -54,15 +54,6 @@ def report_card(student_details):
     return std_details
 
 
-    
-        
-
-
-    
-    
-
-
-
 def main():
     students_details = {
         "Ajay":  {"MAT": 78, "ENG": 85, "TAM": 90, "BIO": 88, "CS": 92},
