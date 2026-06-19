@@ -1,5 +1,3 @@
-
-
 # lambda 
 # syntax -> lambda parametes : valid expression
 
@@ -25,8 +23,8 @@ print(list(filter(lambda x: x%2==0 , lst))) # even number from lst
 
 # sorted() fuction 
 lst=[9,3,7,5,8,6,7]
-print(sorted(lst,reverse = True))
-print(lst)
+print(sorted(lst,key=lambda x : x%2,reverse=True)) # custom sorting using key parameter
+# print(lst)
 
 #sort
 lst=[9,3,7,5,8,6,7]
@@ -40,5 +38,33 @@ lst =[1,2,4,4,5,6,7,8,9,0]
 total = reduce(lambda a,b : a+b , lst) 
 print(total)
 
+print(sum(lst,start=10)) # avoid lambda for simpler function 
+
+
+
+
+
 max_number = reduce(lambda a,b : a if a>b else b,lst )
 print (max_number)
+
+
+#  higher order function using lambda
+def func_builder(num):
+    return lambda  x : x**num
+
+sqaure = func_builder(2)
+cube = func_builder(3)
+
+print(sqaure(4))
+print(cube(3))
+
+def email_builder(domain):
+    # return lambda username : f"{username}@{domain}"
+    def user_name(username):
+        return f"{username}@{domain}"
+    return user_name
+
+gmail = email_builder("gmail.com")
+ymail = email_builder("ymail.com")
+
+print(gmail("ajay1026"))
