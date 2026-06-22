@@ -1,0 +1,7 @@
+hello world
+I am currently learning file_handling 
+...
+hello
+hi
+hi
+..
