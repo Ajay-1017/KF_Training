@@ -196,9 +196,9 @@ logs = [
 # Combine them into a list of tuples.
 
 # lst=[]
-timestamps = [details[0] for details in logs]
-levels = [details[1] for details in logs]
-messages = [details[2] for details in logs]
+# timestamps = [details[0] for details in logs]
+# levels = [details[1] for details in logs]
+# messages = [details[2] for details in logs]
 
 # for time_stamp , level , message in zip(timestamps, levels ,messages):
 #         lst.append((time_stamp , level , message))
@@ -207,11 +207,10 @@ messages = [details[2] for details in logs]
 
 # 2) Create a dictionary mapping timestamp to message.
 
-d={}
-
-for timestamp,message in zip(timestamps,messages):
-        d[timestamp] = message
-print(d)
+# d={}
+# for timestamp,message in zip(timestamps,messages):
+#         d[timestamp] = message
+# print(d)
 
 
 #=============================================================================== 
