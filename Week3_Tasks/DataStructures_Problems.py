@@ -245,7 +245,7 @@ logs = [
 # 1a)
 # def gen_func():
 #     for details in logs:
-#         if details[2]=="ERROR":
+#         if details[1]=="ERROR":
 #             yield details
 # errors = gen_func()
 # for i in errors:
