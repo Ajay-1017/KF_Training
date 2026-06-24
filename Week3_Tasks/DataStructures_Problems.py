@@ -11,11 +11,12 @@ logs = [
     ("2026-06-19 10:30", "ERROR", "API Timeout")
 ]
 
-# -----------------------------------------------------------------------------
+# ===============================================================================
 
 # Problem - 1
 
 # 1) Store all ERROR log messages in a new list.
+
 # new_list=[]
 # for details in logs:
 #     if details[1]=="ERROR":
@@ -24,13 +25,14 @@ logs = [
 
 
 # 2) Store all timestamps of WARNING logs.
+
 # new_list=[]
 # for details in logs:
 #     if details[1]=="WARNING":
 #         new_list.append(details[0])
 # print(new_list)
 
-# -------------------------------------------------------------------------------
+#===============================================================================
 
 # Problem-2
 
@@ -42,17 +44,20 @@ logs = [
 
 
 # 2) Create a tuple containing only (Timestamp, Message) for every ERROR log.
+
 # tup=()
 # for details in logs:
 #     tup+=((details[0],details[2]),)
 # print(tup)
+
+# 2a)
 
 # lst = []
 # for deatils in logs:
 #     lst.append([deatils[0],details[2]])
 # print(lst)
 
-# -------------------------------------------------------------------------------
+#===============================================================================
 
 # Problem-3
 
@@ -77,23 +82,21 @@ logs = [
 #     seen.add(details[2])
 # print(ans) 
 
-# -------------------------------------------------------------------------------
+#===============================================================================
 
 # Problem-4
+
 # 1) Count the number of logs for each level.
 
 # counts = []
-
 # for details in logs:
 #     level = details[1]
-
 #     for i, (lvl, count) in enumerate(counts):
 #         if lvl == level:
 #             counts[i] = (lvl, count + 1)
 #             break
 #     else:
 #         counts.append((level, 1))
-
 # print(counts)
 
 # 2) Count each error message.
@@ -107,7 +110,7 @@ logs = [
 
 # print(d)
 
-# -------------------------------------------------------------------------------
+#===============================================================================
 
 # Problem-5
 
@@ -122,7 +125,7 @@ logs = [
 # for details in logs:
 #         print(details[0])
 
-# -------------------------------------------------------------------------------
+#===============================================================================
 
 # Problem-6
 
@@ -137,7 +140,7 @@ logs = [
 # print(d)
 
 
-# -------------------------------------------------------------------------------
+#===============================================================================
 
 # Problem-7
 
@@ -168,7 +171,7 @@ logs = [
 #     print(date)
 
 
-# -------------------------------------------------------------------------------  
+#===============================================================================  
           
 # Problem - 8
 
@@ -181,7 +184,7 @@ logs = [
 
 # print(list(filter(lambda deatils : deatils[2].startswith("Model"),logs)))
 
-# -------------------------------------------------------------------------------  
+#===============================================================================  
 
 
 # Problem-9
@@ -192,14 +195,14 @@ logs = [
         # messages = [...]
 # Combine them into a list of tuples.
 
-lst=[]
-timestamps = [details[0] for details in logs]
-levels = [details[1] for details in logs]
-messages = [details[2] for details in logs]
+# lst=[]
+# timestamps = [details[0] for details in logs]
+# levels = [details[1] for details in logs]
+# messages = [details[2] for details in logs]
 
-for time_stamp , level , message in zip(timestamps, levels ,messages):
-        lst.append((time_stamp , level , message))
-print(lst)
+# for time_stamp , level , message in zip(timestamps, levels ,messages):
+#         lst.append((time_stamp , level , message))
+# print(lst)
 
 
 # 2) Create a dictionary mapping timestamp to message.
@@ -211,50 +214,53 @@ print(lst)
 # print(d)
 
 
-# ------------------------------------------------------------------------------- 
+#=============================================================================== 
 
 # Problem -10
 
 # 1) Print log number before each log.
 
-for i in range(len(logs)):
-    details = logs[i]
-    print(f"{i+1}.{details}")
+# for i in range(len(logs)):
+#     details = logs[i]
+#     print(f"{i+1}.{details}")
 
 # 2) Create a dictionary where key is log number and value is the log tuple.
 
-d={}
-for i in range(len(logs)):
-    details = logs[i]
-    d[i+1]=details
-print(d)
+# d={}
+# for i in range(len(logs)):
+#     details = logs[i]
+#     d[i+1]=details
+# print(d)
+
+#=============================================================================== 
 
 # Problem - 11
-# Create a generator that yields one ERROR log at a time.
+# 1) Create a generator that yields one ERROR log at a time.
 
 
-gen =  (details for details in logs if details[1]=="ERROR" )
+# gen =  (details for details in logs if details[1]=="ERROR" )
 
-for i in gen:
-    print(i)
+# for i in gen:
+#     print(i)
 
-def gen_func():
-    for details in logs:
-        if details[2]=="ERROR":
-            yield details
-errors = gen_func()
-for i in errors:
-    print(i)
+# 1a)
+# def gen_func():
+#     for details in logs:
+#         if details[2]=="ERROR":
+#             yield details
+# errors = gen_func()
+# for i in errors:
+#     print(i)
     
 
-# Create a generator that yields one log record at a time.
+# 2) Create a generator that yields one log record at a time.
 
 # gen =  (details for details in logs)
 # for i in gen:
 #     print(i)
 
 
-
+#=============================================================================== 
 
 
 
