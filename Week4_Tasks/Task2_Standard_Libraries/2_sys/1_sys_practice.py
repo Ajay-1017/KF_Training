@@ -1,4 +1,6 @@
 import sys
+import math
+import practice
 
 # 1) version of compelte python Version
 print(sys.version)  
@@ -20,10 +22,15 @@ print(sys.platform)
 # 4) shows where the python is installed
 print(sys.executable)
 
+# 5) Python needs to know where to search for modules.
+print(sys.path)
 
-sys.stderr.write("test\n")
-sys.stderr.flush()
-sys.stdout.write("hello\n")
+# 6) Standard output stream.
+sys.stderr.write("Hello")
+sys.stdout.write("World")
+
+# 7) Dictionary of already imported modules.
+print(sys.modules)
 
 if len(sys.argv)>1:
     print(sys.argv[1])

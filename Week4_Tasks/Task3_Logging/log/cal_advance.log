@@ -1,0 +1,4 @@
+CRITICAL:__main__:div : 6 / 3 = 2.0
+ERROR:__main__:try to divide by zero
+ERROR:__main__:try to divide by zero
+CRITICAL:__main__:div : 6 / 0 = None
