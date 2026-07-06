@@ -1,13 +1,11 @@
 import logging
-import employee_advance
 import os
 
 Base_dir = os.path.dirname(__file__)
-
 os.makedirs(os.path.join(Base_dir,'log'),exist_ok=True)
 
 logging.basicConfig(
-    filename = os.path.join(Base_dir,'log','test.log'),
+    filename = os.path.join(Base_dir,'log','log_basic.log'),
     level = logging.DEBUG , 
     format = '%(asctime)s : %(levelname)s : %(message)s'
     ) # After changing the basic config (debug and below) also shown in console

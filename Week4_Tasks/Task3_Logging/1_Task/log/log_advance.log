@@ -1,0 +1,31 @@
+ERROR:__main__:try to divide by zero
+ERROR:__main__:Try to divide by zero
+Traceback (most recent call last):
+  File "/home/ajay.b@knackforge.com/Desktop/python/KF_training/Week4_Tasks/Task3_Logging/1_Task/sample_log_advance.py", line 40, in div
+    res = a/b
+          ~^~
+ZeroDivisionError: division by zero
+ERROR:__main__:Try to divide by zero
+Traceback (most recent call last):
+  File "/home/ajay.b@knackforge.com/Desktop/python/KF_training/Week4_Tasks/Task3_Logging/1_Task/sample_log_advance.py", line 40, in div
+    res = a/b
+          ~^~
+ZeroDivisionError: division by zero
+ERROR:__main__:Try to divide by zero
+Traceback (most recent call last):
+  File "/home/ajay.b@knackforge.com/Desktop/python/KF_training/Week4_Tasks/Task3_Logging/1_Task/sample_log_advance.py", line 43, in div
+    res = a/b
+          ~^~
+ZeroDivisionError: division by zero
+ERROR:__main__:Try to divide by zero
+Traceback (most recent call last):
+  File "/home/ajay.b@knackforge.com/Desktop/python/KF_training/Week4_Tasks/Task3_Logging/1_Task/sample_log_advance.py", line 43, in div
+    res = a/b
+          ~^~
+ZeroDivisionError: division by zero
+ERROR:__main__:Try to divide by zero
+Traceback (most recent call last):
+  File "/home/ajay.b@knackforge.com/Desktop/python/KF_training/Week4_Tasks/Task3_Logging/1_Task/sample_log_advance.py", line 44, in div
+    res = a/b
+          ~^~
+ZeroDivisionError: division by zero

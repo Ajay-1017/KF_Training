@@ -15,13 +15,12 @@ logger.setLevel(logging.INFO) # Set the minimum logging level for this logger.
 
 formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s') # Define how each log message should be formatted.
 
-file_handler = logging.FileHandler(os.path.join(base_dir,'log','employee.log')) # Create a FileHandler that writes log messages to employee.log.
+file_handler = logging.FileHandler(os.path.join(base_dir,'log','employee_advance.log')) # Create a FileHandler that writes log messages to employee.log.
 
 logger.addHandler(file_handler) # Attach the FileHandler to the logger so log messages are written to the file.
 
 file_handler.setFormatter(formatter) # Apply the formatter so log messages are written in the specified format.
 
-file_handler.setLevel(logging.ERROR)
 
 
 class Employee:

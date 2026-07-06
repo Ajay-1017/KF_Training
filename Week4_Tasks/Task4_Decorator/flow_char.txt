@@ -1,0 +1,25 @@
+Python
+│
+└── First-Class Functions
+      │
+      │ Functions are objects
+      │
+      ▼
+Higher-Order Functions
+│
+├── Take functions as arguments
+│
+├── Return functions
+│
+├── Decorators
+│     ├── Take a function
+│     ├── Return a function
+│     └── Add extra behavior
+│
+└── Can create Closures
+      │
+      ▼
+Closure
+│
+└── A returned inner function that remembers
+    variables from its outer function.
