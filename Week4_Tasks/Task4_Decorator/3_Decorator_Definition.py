@@ -14,6 +14,8 @@ def decorator_function(original_function):
     return wrapper_function
 
 
+
+
 @decorator_function # same as this -> display = decorator_function(display) 
 def display():
     print("welcome to decorator programming ")

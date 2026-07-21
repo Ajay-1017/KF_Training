@@ -56,7 +56,7 @@ print(curr_time)
 dt= datetime.datetime.now(pytz.timezone("Asia/kolkata"))
 print(dt.strftime('%B %d ,%Y'))
 
-# 6a) strftime -> convert string to datetime
+# 6a) strptime -> convert string to datetime
 
 dt_str = datetime.datetime.strptime('June 26 ,2026','%B %d ,%Y')
 print(dt_str)

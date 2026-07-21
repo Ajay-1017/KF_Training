@@ -80,7 +80,6 @@ def my_timer(func):
 # @A @B is simply A(B(function))
 import time
 
-
 @my_logger
 @my_timer
 def add(a,b):
