@@ -1,0 +1,57 @@
+                    User
+                      │
+                      ▼
+      http://127.0.0.1:8000/
+                      │
+                      ▼
+                 Uvicorn
+                      │
+                      ▼
+                  FastAPI
+                      │
+          Finds @app.get("/")
+                      │
+                      ▼
+              home(request)
+                      │
+                      ▼
+      TemplateResponse(home_finished.html)
+                      │
+                      ▼
+                  Jinja2
+      ┌────────────────────────────────┐
+      │ {{ title }}                    │
+      │ {{ post.author }}              │
+      │ {% for %}                      │
+      │ url_for("home")                │
+      │ url_for("static", path="...")  │
+      └────────────────────────────────┘
+                      │
+                      ▼
+               Final HTML
+                      │
+                      ▼
+                 Browser
+          ┌──────────┴──────────┐
+          ▼                     ▼
+Requests CSS             Requests Images
+          │                     │
+          ▼                     ▼
+    /static/...           /static/...
+          │                     │
+          ▼                     ▼
+app.mount("/static", StaticFiles(...))
+          │
+          ▼
+      static/
+          │
+          ├── css/
+          ├── profile_pics/
+          ├── icons/
+          └── ...
+          │
+          ▼
+ Browser receives files
+          │
+          ▼
+ Beautiful webpage 🎉

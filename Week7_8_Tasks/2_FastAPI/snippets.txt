@@ -1,0 +1,607 @@
+#----------------------------------------------------------------------------------------------------------
+# 1. project_structure 
+#----------------------------------------------------------------------------------------------------------
+
+
+posts : list[dict] = [
+    {
+        "id": 1,
+        "author": "Corey Schafer",
+        "title": "FastAPI is Awesome",
+        "content": "This framework is really easy to use and super fast.",
+        "date_posted": "April 20, 2025",
+    },
+    {
+        "id": 2,
+        "author": "Jane Doe",
+        "title": "Python is Great for Web Development",
+        "content": "Python is a great language for web development, and FastAPI makes it even better.",
+        "date_posted": "April 21, 2025",
+    },
+]
+
+
+#----------------------------------------------------------------------------------------------------------
+# 2. Jinja2_Templates
+#----------------------------------------------------------------------------------------------------------
+
+## Home Template
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FastAPI Blog</title>
+  </head>
+  <body>
+    <h1>Home Page</h1>
+    <p>This is using a template!</p>
+  </body>
+</html>
+
+
+#----------------------------------------------------------------------------------------------------------
+# 3. StarletteHTTPException Handler & RequestValidationError Handler
+#----------------------------------------------------------------------------------------------------------
+
+
+### StarletteHTTPException Handler
+@app.exception_handler(StarletteHTTPException)
+def general_http_exception_handler(request: Request, exception: StarletteHTTPException):
+    message = (
+        exception.detail
+        if exception.detail
+        else "An error occurred. Please check your request and try again."
+    )
+
+    if request.url.path.startswith("/api"):
+        return JSONResponse(
+            status_code=exception.status_code,
+            content={"detail": message},
+        )
+    return templates.TemplateResponse(
+        request,
+        "error.html",
+        {
+            "status_code": exception.status_code,
+            "title": exception.status_code,
+            "message": message,
+        },
+        status_code=exception.status_code,
+    )
+
+
+### RequestValidationError Handler
+@app.exception_handler(RequestValidationError)
+def validation_exception_handler(request: Request, exception: RequestValidationError):
+    if request.url.path.startswith("/api"):
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            content={"detail": exception.errors()},
+        )
+    return templates.TemplateResponse(
+        request,
+        "error.html",
+        {
+            "status_code": status.HTTP_422_UNPROCESSABLE_CONTENT,
+            "title": status.HTTP_422_UNPROCESSABLE_CONTENT,
+            "message": "Invalid request. Please check your input and try again.",
+        },
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+    )
+
+#----------------------------------------------------------------------------------------------------------
+# 4.Create Post (pydantic schema)
+#----------------------------------------------------------------------------------------------------------
+@app.post(
+    "/api/posts",
+    response_model=PostResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_post(post: PostCreate):
+    new_id = max(p["id"] for p in posts) + 1 if posts else 1
+    new_post = {
+        "id": new_id,
+        "author": post.author,
+        "title": post.title,
+        "content": post.content,
+        "date_posted": "April 23, 2025",
+    }
+    posts.append(new_post)
+    return new_post
+
+
+#==========================================================================================================
+# 5. Adding a database
+#==========================================================================================================
+
+#----------------------------------------------------------------------------------------------------------
+# 5.a) database.py
+#----------------------------------------------------------------------------------------------------------
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
+
+SQLALCHEMY_DATABASE_URL = "sqlite:///./blog.db"
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+def get_db():
+    with SessionLocal() as db:
+        yield db
+
+#----------------------------------------------------------------------------------------------------------
+# 5.b) models.py
+#----------------------------------------------------------------------------------------------------------
+
+from __future__ import annotations
+
+from datetime import UTC, datetime
+
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from database import Base
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
+    image_file: Mapped[str | None] = mapped_column(
+        String(200),
+        nullable=True,
+        default=None,
+    )
+
+    posts: Mapped[list[Post]] = relationship(back_populates="author")
+
+    @property
+    def image_path(self) -> str:
+        if self.image_file:
+            return f"/media/profile_pics/{self.image_file}"
+        return "/static/profile_pics/default.jpg"
+
+
+class Post(Base):
+    __tablename__ = "posts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String(100), nullable=False)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True,
+    )
+    date_posted: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(UTC),
+    )
+
+    author: Mapped[User] = relationship(back_populates="posts")
+
+
+#==========================================================================================================
+# 9. Frontend forms
+#==========================================================================================================
+
+#----------------------------------------------------------------------------------------------------------
+# 9.a) New Post Modal for layout.html
+#----------------------------------------------------------------------------------------------------------
+
+<!-- NOTE: Once auth is set up, this button will only be visible when logged in -->
+<button class="btn btn-outline-light mb-2 mb-md-0 me-md-2"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#createPostModal">New Post</button>
+<!-- NOTE: Once auth is set up, this button will only be visible when logged in -->
+
+
+#----------------------------------------------------------------------------------------------------------
+# 9.b) Create Post Modal
+#----------------------------------------------------------------------------------------------------------
+
+<!-- Create Post Modal -->
+<div class="modal fade"
+        id="createPostModal"
+        tabindex="-1"
+        aria-labelledby="createPostModalLabel"
+        aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="createPostModalLabel">New Post</h5>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+        </div>
+        <form id="createPostForm">
+        <div class="modal-body">
+            <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+            <label for="content" class="form-label">Content</label>
+            <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Post</button>
+        </div>
+        </form>
+    </div>
+    </div>
+</div>
+
+#----------------------------------------------------------------------------------------------------------
+# 9.c) Success and Error Modals
+#----------------------------------------------------------------------------------------------------------
+
+<!-- Success Modal -->
+<div class="modal fade"
+        id="successModal"
+        tabindex="-1"
+        aria-labelledby="successModalLabel"
+        aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="successModalLabel">Success</h5>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <p id="successMessage" class="fs-5"></p>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade"
+        id="errorModal"
+        tabindex="-1"
+        aria-labelledby="errorModalLabel"
+        aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <p id="errorMessage" class="fs-5"></p>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+#----------------------------------------------------------------------------------------------------------
+# 9.d) utils.js
+#----------------------------------------------------------------------------------------------------------
+
+// Error message extraction from API responses
+export function getErrorMessage(error) {
+  if (typeof error.detail === "string") {
+    return error.detail;
+  } else if (Array.isArray(error.detail)) {
+    return error.detail.map((err) => err.msg).join(". ");
+  }
+  return "An error occurred. Please try again.";
+}
+
+// Show a Bootstrap modal by ID
+export function showModal(modalId) {
+  const modal = bootstrap.Modal.getOrCreateInstance(
+    document.getElementById(modalId),
+  );
+  modal.show();
+  return modal;
+}
+
+// Hide a Bootstrap modal by ID
+export function hideModal(modalId) {
+  const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+  if (modal) modal.hide();
+}
+
+#----------------------------------------------------------------------------------------------------------
+# 9.e) Create Post JavaScript
+#----------------------------------------------------------------------------------------------------------
+
+<!-- Create Post Form Handler -->
+<script type="module">
+    import {
+    getErrorMessage,
+    hideModal,
+    showModal,
+    } from "/static/js/utils.js";
+
+    const createForm = document.getElementById("createPostForm");
+
+    createForm.addEventListener("submit", async (event) => {
+    // Stop default form submission - we'll handle it with JavaScript
+    event.preventDefault();
+
+    // Gather form values into a plain object {title: "...", content: "..."}
+    const formData = new FormData(createForm);
+    const postData = Object.fromEntries(formData.entries());
+
+    // TEMPORARY - hardcoded until authorization (Tutorial 11)
+    postData.user_id = 1;
+
+    try {
+        // POST to our API as JSON
+        const response = await fetch("/api/posts", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+        });
+
+        if (response.ok) {
+        const data = await response.json();
+        document.getElementById("successMessage").textContent =
+            `Post "${data.title}" created successfully!`;
+
+        hideModal("createPostModal");
+        showModal("successModal");
+
+        // Clear form
+        createForm.reset();
+
+        // Reload page after modal is hidden to show new post
+        document
+            .getElementById("successModal")
+            .addEventListener(
+            "hidden.bs.modal",
+            () => {
+                window.location.reload();
+            },
+            { once: true },
+            );
+        } else {
+        const error = await response.json();
+        document.getElementById("errorMessage").textContent =
+            getErrorMessage(error);
+
+        hideModal("createPostModal");
+        showModal("errorModal");
+        }
+    } catch (error) {
+        document.getElementById("errorMessage").textContent =
+        "Network error. Please check your connection and try again.";
+        showModal("errorModal");
+    }
+    });
+</script>
+
+{% block scripts %}
+{% endblock scripts %}
+
+#----------------------------------------------------------------------------------------------------------
+# 9.f) Edit/Delete Single Post
+#----------------------------------------------------------------------------------------------------------
+<!-- Only show edit/delete options if user_id is 1 (TEMPORARY - until authentication) -->
+{% if post.user_id == 1 %}
+    <div class="post-actions mt-3 pt-3 border-top">
+    <button type="button"
+            class="btn btn-outline-secondary me-1"
+            data-bs-toggle="modal"
+            data-bs-target="#editModal">Edit Post</button>
+    <button type="button"
+            class="btn btn-outline-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteModal">Delete Post</button>
+    </div>
+{% endif %}
+
+
+#----------------------------------------------------------------------------------------------------------
+# 9.g) Edit Post Modal
+#----------------------------------------------------------------------------------------------------------
+<!-- Edit Post Modal -->
+<div class="modal fade"
+     id="editModal"
+     tabindex="-1"
+     aria-labelledby="editModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Post</h5>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+      </div>
+      <form id="editPostForm">
+        <div class="modal-body">
+          <input type="hidden" name="post_id" value="{{ post.id }}">
+          <div class="mb-3">
+            <label for="editTitle" class="form-label">Title</label>
+            <input type="text"
+                   class="form-control"
+                   id="editTitle"
+                   name="title"
+                   value="{{ post.title }}"
+                   required>
+          </div>
+          <div class="mb-3">
+            <label for="editContent" class="form-label">Content</label>
+            <textarea class="form-control"
+                      id="editContent"
+                      name="content"
+                      rows="5"
+                      required>{{ post.content }}</textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button"
+                  class="btn btn-outline-secondary"
+                  data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+#----------------------------------------------------------------------------------------------------------
+# 9.h) Delete Confirmation Modal
+#----------------------------------------------------------------------------------------------------------
+<!-- Delete Confirmation Modal -->
+<div class="modal fade"
+     id="deleteModal"
+     tabindex="-1"
+     aria-labelledby="deleteModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="fs-5">Are you sure you want to delete this post? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-outline-secondary"
+                data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+#----------------------------------------------------------------------------------------------------------
+# 9.j) Edit/Delete JavaScript
+#----------------------------------------------------------------------------------------------------------
+{% block scripts %}
+  <script type="module">
+    import {
+      getErrorMessage,
+      hideModal,
+      showModal,
+    } from "/static/js/utils.js";
+
+    // Get post ID from Jinja2 template
+    const postId = {{ post.id }};
+
+    // Edit Post Form Handler
+    const editForm = document.getElementById("editPostForm");
+    editForm.addEventListener("submit", async (event) => {
+      // Stop default form submission - we'll handle it with JavaScript
+      event.preventDefault();
+
+      // Gather form values into a plain object
+      const formData = new FormData(editForm);
+      const postData = Object.fromEntries(formData.entries());
+
+      // Remove post_id from data (it's in the URL, not the body)
+      delete postData.post_id;
+
+      try {
+        // PATCH for partial update (just title and content, not user_id)
+        const response = await fetch(`/api/posts/${postId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postData),
+        });
+
+        if (response.ok) {
+          document.getElementById("successMessage").textContent =
+            "Post updated successfully!";
+
+          hideModal("editModal");
+          showModal("successModal");
+
+          document
+            .getElementById("successModal")
+            .addEventListener(
+              "hidden.bs.modal",
+              () => {
+                window.location.reload();
+              },
+              { once: true },
+            );
+        } else {
+          const error = await response.json();
+          document.getElementById("errorMessage").textContent =
+            getErrorMessage(error);
+
+          hideModal("editModal");
+          showModal("errorModal");
+        }
+      } catch (error) {
+        document.getElementById("errorMessage").textContent =
+          "Network error. Please check your connection and try again.";
+        showModal("errorModal");
+      }
+    });
+
+    // Delete Post Handler - listen for click on delete button
+    const deleteButton = document.getElementById("confirmDelete");
+    deleteButton.addEventListener("click", async () => {
+      try {
+        // DELETE request - no body needed, post_id is in the URL
+        const response = await fetch(`/api/posts/${postId}`, {
+          method: "DELETE",
+        });
+
+        // 204 = No Content (success)
+        if (response.status === 204) {
+          // Post is gone, redirect to home page
+          window.location.href = "/";
+        } else {
+          const error = await response.json();
+          document.getElementById("errorMessage").textContent =
+            getErrorMessage(error);
+
+          hideModal("deleteModal");
+          showModal("errorModal");
+        }
+      } catch (error) {
+        document.getElementById("errorMessage").textContent =
+          "Network error. Please check your connection and try again.";
+        showModal("errorModal");
+      }
+    });
+  </script>
+{% endblock scripts %}
