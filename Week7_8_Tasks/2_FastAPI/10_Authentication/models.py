@@ -27,40 +27,26 @@ class User(Base):
     # Primary Key
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
 
-            # Mapped :
-
-            #     Database Table
-            # ==========================
-            # | id | name | price |
-            # ==========================
-            # | 1  | Laptop |50000|
-            # ==========================
-            #          ▲
-            #          │ Mapping
-            #          ▼
-            # Python Object
-            # ==========================
-            # product.id = 1
-            # product.name = "Laptop"
-            # product.price = 50000
-            # ==========================
-
-            
     # Username (must be unique)
     username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
     # Email (must be unique)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
 
+    password_hash : Mapped[str] = mapped_column(String(200) , nullable = False)
+
     # Stores profile image filename
     # None means user hasn't uploaded an image
     image_file: Mapped[str | None] = mapped_column(String(200), nullable=True, default=None )
 
+    
+    
     # One User → Many Posts
     # This does NOT create a database column.
     # It lets us access all posts written by a user.
     posts: Mapped[list[Post]] = relationship(
-        back_populates="author"
+        back_populates="author",
+        cascade= "all, delete-orphan", # if user is deleted it should delete all of there posts
     )
 
     # Returns profile image URL

@@ -4,14 +4,14 @@ from fastapi import FastAPI , Depends  , status
 from fastapi.exceptions import HTTPException
 
 
-from Tasks.Student_db.database import engine , get_db , Base 
+from database import engine , get_db , Base 
 
 from sqlalchemy import select 
 from sqlalchemy.orm import Session
 
-from Tasks.Student_db.schemas import StudentResponse ,StudentCreate , StudentUpdate
+from schemas import StudentResponse ,StudentCreate , StudentUpdate
 
-import Tasks.Student_db.models as models
+import models as models
 
 app = FastAPI()
 
@@ -91,7 +91,7 @@ def update_student(student_update : StudentUpdate , student_id : int , db : Anno
         detail = "id is not exist"
     )
 
-    if student.email is not None and student.email != student_update.email:
+    if student_update.email is not None and student.email != student_update.email:
 
         result = db.execute(
             select(models.Student).where(models.Student.email == student_update.email)
