@@ -37,7 +37,7 @@ def my_logger(func):
 # Simple memory:
 # "The wrapper behaves like the original function."
 
-    @wraps(func)
+    
     def wrapper_func(*args,**kwargs):
         logger.debug('function {} with arguments {} and keyword arguments {}'.format(func.__name__,args,kwargs))
         logger.info('function {} with arguments {} and keyword arguments {}'.format(func.__name__,args,kwargs))
@@ -56,7 +56,7 @@ def my_logger(func):
 def my_timer(func):
     import time
 
-    @wraps(func)
+    
     def wrapper(*args):
         t1 = time.time()
         result = func(*args)
@@ -66,6 +66,7 @@ def my_timer(func):
         print(f"total run time of {func.__name__} is {run_time} sec")
         print("end_time :",t1)
         return result
+    
     return wrapper
 
 # import time
@@ -87,8 +88,8 @@ def add(a,b):
     return a+b
 print("addtion :",add(1,2))
 
-# add = my_timer(add)
-# print(add.__name__)  
+add = my_timer(add)
+print(add.__name__)  
 
 
 # @my_timer
