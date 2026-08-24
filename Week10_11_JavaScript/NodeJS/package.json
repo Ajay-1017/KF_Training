@@ -1,0 +1,13 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "Node.js crash course code",
+  "license": "ISC",
+  "author": "Ajay",
+  "type": "module",
+  "main": "index.js",
+
+  "scripts": {
+    "start" : "node server.js"
+  }
+}
