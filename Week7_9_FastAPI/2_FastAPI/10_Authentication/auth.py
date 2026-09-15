@@ -9,7 +9,8 @@ from config import settings
 
 password_hash = PasswordHash.recommended() # gives us secured default
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl = "api/users/token") 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl = "api/users/token")
+ 
 # extracts the token from authorization header
 # adv : -> This enables the authorize button in our docs which makes testing authentication lot easier
 
