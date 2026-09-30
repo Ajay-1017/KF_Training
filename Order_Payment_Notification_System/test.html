@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+
+<h2>Order Payment Status</h2>
+
+<label>
+    Order ID:
+    <input id="orderId" type="number">
+</label>
+
+<button onclick="connect()">Connect</button>
+
+<p id="message">Not connected</p>
+
+<script>
+    let ws;
+
+function connect() {
+    const orderId = document.getElementById("orderId").value;
+
+    // Close the previous WebSocket
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.close();
+    }
+
+    ws = new WebSocket(
+        `ws://127.0.0.1:8000/ws/${orderId}`
+    );
+
+    ws.onopen = () => {
+        console.log("Connected");
+        document.getElementById("message").textContent =
+            `Connected to ordervgdvdz:) ${orderId}`;
+    };
+
+    ws.onmessage = (event) => {
+        console.log("Server:", event.data);
+        document.getElementById("message").textContent =
+            event.data;
+    };
+
+    ws.onerror = (error) => {
+        console.log("WebSocket error:", error);
+        document.getElementById("message").textContent =
+            "WebSocket error";
+    };
+
+    ws.onclose = () => {
+        console.log("Disconnected");
+    };
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+
+Answer :  This code implements a functional Student Marks Management System that allows users to input, manipulate, 
+and analyze a list of marks through a menu-driven interface. While the logic for basic operations like finding extremes and calculating averages is sound, 
+the `remove_duplicates` function uses a manual pointer-based approach that is less efficient and more error-prone than Python's built-in set operations. 
+Overall, the script is well-structured and includes necessary input validation, 
+though it could be improved by handling empty list scenarios more consistently across all functions.
+
+Prompt tokens (i/p tokens) :  993
+candidates tokens (o/p tokens) :  108
+total_tokens :  1101
+input_token_cost : $0.0002
+output_token_cost : $0.0002
+total_token_cost : $0.0004
+
+
+Answer :  This code implements a functional Student Marks Management System that allows users to input, manipulate, 
+and analyze a list of marks through a menu-driven interface. While the logic for basic operations like finding extremes and calculating averages is sound, 
+the `remove_duplicates` function uses a manual pointer-based approach that is less efficient and more error-prone than Python's built-in set operations. 
+Overall, the script is well-structured and includes necessary input validation, 
+though it could be improved by handling empty list scenarios more consistently across all functions.
+
+Prompt tokens (i/p tokens) :  993
+candidates tokens (o/p tokens) :  108
+total_tokens :  1101
+input_token_cost : $0.0002
+output_token_cost : $0.0002
+total_token_cost : $0.0004
+
+
+Answer :  This code implements a functional Student Marks Management System that allows users to input, manipulate, 
+and analyze a list of marks through a menu-driven interface. While the logic for basic operations like finding extremes and calculating averages is sound, 
+the `remove_duplicates` function uses a manual pointer-based approach that is less efficient and more error-prone than Python's built-in set operations. 
+Overall, the script is well-structured and includes necessary input validation, 
+though it could be improved by handling empty list scenarios more consistently across all functions.
+Prompt tokens (i/p tokens) :  993
+candidates tokens (o/p tokens) :  108
+total_tokens :  1101
+input_token_cost : $0.0002
+output_token_cost : $0.0002
+total_token_cost : $0.0004

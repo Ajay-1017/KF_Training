@@ -1,0 +1,5 @@
+-> The server should own important state that the client shouldn't be trusted to choose.
+
+
+-> connect to the database server
+1. psql -U ajay -h localhost -p 5432 -d postgres

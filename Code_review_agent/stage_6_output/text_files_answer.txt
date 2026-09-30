@@ -1,0 +1,53 @@
+
+1) test_sql_injection :
+
+Answer :  [
+    {'line': 7, 'severity': 'high', 'message': 'SQL injection vulnerability: user input is concatenated directly into the query string.'}, 
+    {'line': 5, 'severity': 'medium', 'message': 'Database connection is opened but never closed, which can lead to resource leaks.'}
+]
+
+
+2) test_hardcoded_secret
+
+Answer :  [
+    {'line': 4, 'severity': 'high', 'message': 'Hardcoded API key detected. Sensitive credentials should be stored in environment variables or a secure secret manager.'}, 
+    {'line': 6, 'severity': 'medium', 'message': 'The request is missing error handling. It should check response.raise_for_status() to handle HTTP errors.'}
+]
+
+
+3) test_md5_password_hashing
+
+Answer :  [
+    {'line': 6, 'severity': 'high', 'message': 'MD5 is a cryptographically broken hash function and should not be used for password hashing. 
+    Use a slow, salted hashing algorithm like Argon2, bcrypt, or scrypt instead.'}, 
+
+    {'line': 6, 'severity': 'high', 'message': 'The password hashing implementation lacks a salt, making it vulnerable to rainbow table attacks.'}
+]
+
+
+4) test_missingKey
+
+Answer :  [
+    {'line': 3, 'severity': 'high', 'message': "KeyError: 'email' will be raised if the 'email' key is missing from the user dictionary."},
+    {'line': 2, 'severity': 'medium', 'message': "KeyError: 'name' will be raised if the 'name' key is missing from the user dictionary."}
+]
+
+
+5) test_unclosed_file
+
+Answer :  [
+    {'line': 2, 'severity': 'medium', 'message': "The file object is opened but never closed, which can lead to resource leaks. Use a 'with' statement instead."}
+]
+
+
+6) test_safe_divison
+
+Answer :  []
+
+
+7) test_password_check
+
+Answer :  [
+    {'line': 4, 'severity': 'medium', 'message': 'The check_password function does not handle potential TypeErrors if stored_hash is not in the expected format 
+    or if password is not a string.'}
+    ]

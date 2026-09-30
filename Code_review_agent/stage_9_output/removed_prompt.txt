@@ -1,0 +1,2 @@
+    A finding should be reported only when the supplied code actually demonstrates the problem; 
+    don't report hypothetical issues that depend on invalid, unsupported, or unusual inputs.

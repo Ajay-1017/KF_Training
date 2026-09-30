@@ -1,0 +1,4 @@
+SELECT id,
+       status
+FROM public.review_jobs
+LIMIT 1000;

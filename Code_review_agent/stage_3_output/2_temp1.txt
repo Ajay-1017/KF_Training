@@ -1,0 +1,33 @@
+Answer :  This code implements a functional **Student Marks Management System** that allows users to perform basic operations like adding, 
+calculating statistics (high, low, average), and manipulating a list of marks. While the logic for these operations is mostly sound, 
+the `remove_duplicates` function is unnecessarily complex and could lead to data loss or indexing errors, 
+and the program lacks robust error handling for empty list scenarios in operations like `average` or `remove_mark`.
+
+Prompt tokens (i/p tokens) :  993
+candidates tokens (o/p tokens) :  90
+total_tokens :  1083
+input_token_cost : $0.0002
+output_token_cost : $0.0001
+total_token_cost : $0.00030000000000000003
+
+
+Answer :  This code implements a functional "Student Marks Management System" that allows users to perform standard operations 
+like calculating statistics (highest, lowest, average) andmanaging list data (sorting, removing marks, and filtering duplicates). 
+While the logic is largely functional, the `remove_duplicates` function uses an unconventional two-pointer manualapproach rather than Python’s built-in `set()` 
+or `list` comprehension techniques, and the application lacks global error handling for edge cases like empty lists during division.
+
+Prompt tokens (i/p tokens) :  993
+candidates tokens (o/p tokens) :  98
+total_tokens :  1091
+input_token_cost : $0.0002
+output_token_cost : $0.0001
+total_token_cost : $0.00030000000000000003
+
+
+Answer :  This code implements a functional **Student Marks Management System** that allows users to perform basic CRUD operations and data analysis (min, max, average, sorting) on a list of marks. While the logic is largely functional, the `remove_duplicates` function is manually implemented in a complex way that modifies the input list in-place, and the program lacksrobust error handling for empty list scenarios in operations like `average` or `remove_mark`.
+Prompt tokens (i/p tokens) :  993
+candidates tokens (o/p tokens) :  90
+total_tokens :  1083
+input_token_cost : $0.0002
+output_token_cost : $0.0001
+total_token_cost : $0.00030000000000000003
