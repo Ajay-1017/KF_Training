@@ -214,11 +214,12 @@ async def update_user_partial(
 
     if not user:
         raise HTTPException(
-            status_code= status.HTTP_404_NOT_FOUND,detail = "user not found"
+            status_code= status.HTTP_404_NOT_FOUND,
+            detail = "user not found"
         )
 
     if (
-        user_update.username.lower() is not None 
+        user_update.username is not None 
         and user_update.username.lower() != user.username.lower()
     ):
         result = await db.execute(
@@ -235,7 +236,7 @@ async def update_user_partial(
 
     
     if (
-        user_update.email.lower() is not None 
+        user_update.email is not None 
         and user_update.email.lower() != user.email.lower()
     ):
         result = await db.execute(
